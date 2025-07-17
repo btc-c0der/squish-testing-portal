@@ -1,0 +1,985 @@
+{% extends "base.html" %}
+
+{% block title %}Real-World Examples - Squish Testing Portal{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="mb-4">Real-World Testing Examples</h1>
+            <p class="lead mb-5">
+                Production-ready test scenarios and best practices from real software projects.
+            </p>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                <strong>Note:</strong> These examples are based on real-world scenarios but have been anonymized 
+                and simplified for educational purposes.
+            </div>
+        </div>
+    </div>
+    
+    <!-- E-commerce Application Testing -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">
+                <i class="fas fa-shopping-cart"></i> E-commerce Application Testing
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5>Scenario: Complete Purchase Flow</h5>
+                    <p>
+                        This example demonstrates testing a complete e-commerce purchase flow, including
+                        product search, cart management, checkout, and payment processing.
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-python">import squish
+import test
+import time
+
+def test_complete_purchase_flow():
+    """Test complete e-commerce purchase flow"""
+    try:
+        # Initialize test
+        startApplication("ecommerce-app")
+        
+        # Step 1: User Login
+        login_user("john.doe@example.com", "securepassword123")
+        
+        # Step 2: Search for product
+        search_product("wireless headphones")
+        
+        # Step 3: Select and add to cart
+        select_product_and_add_to_cart("Sony WH-1000XM4")
+        
+        # Step 4: Proceed to checkout
+        proceed_to_checkout()
+        
+        # Step 5: Fill shipping information
+        fill_shipping_information({
+            "first_name": "John",
+            "last_name": "Doe",
+            "address": "123 Main St",
+            "city": "New York",
+            "zip_code": "10001"
+        })
+        
+        # Step 6: Select payment method
+        select_payment_method("credit_card")
+        
+        # Step 7: Complete purchase
+        complete_purchase()
+        
+        # Step 8: Verify order confirmation
+        verify_order_confirmation()
+        
+        test.log("Purchase flow completed successfully")
+        
+    except Exception as e:
+        test.fail(f"Purchase flow failed: {str(e)}")
+        take_screenshot("purchase_flow_error")
+    
+    finally:
+        cleanup_test_data()
+        closeApplication()
+
+def login_user(email, password):
+    """Login user with error handling"""
+    try:
+        # Navigate to login page
+        login_button = waitForObject(":Login_QPushButton", 5000)
+        clickButton(login_button)
+        
+        # Fill credentials
+        email_field = waitForObject(":Email_QLineEdit", 3000)
+        password_field = waitForObject(":Password_QLineEdit", 3000)
+        
+        type(email_field, email)
+        type(password_field, password)
+        
+        # Submit login
+        submit_button = findObject(":Submit_QPushButton")
+        clickButton(submit_button)
+        
+        # Wait for successful login
+        welcome_message = waitForObject(":Welcome_QLabel", 10000)
+        test.verify(welcome_message.visible, "User login successful")
+        
+    except Exception as e:
+        test.fail(f"Login failed: {str(e)}")
+        raise
+
+def search_product(search_term):
+    """Search for a product with validation"""
+    try:
+        search_box = waitForObject(":Search_QLineEdit", 5000)
+        search_box.clear()
+        type(search_box, search_term)
+        
+        # Trigger search
+        search_button = findObject(":SearchButton_QPushButton")
+        clickButton(search_button)
+        
+        # Wait for search results
+        results_container = waitForObject(":SearchResults_QWidget", 10000)
+        test.verify(results_container.visible, "Search results displayed")
+        
+        # Verify search results contain expected items
+        results = findChildren(results_container, {"type": "QLabel", "name": "ProductName"})
+        test.verify(len(results) > 0, "Search returned products")
+        
+    except Exception as e:
+        test.fail(f"Product search failed: {str(e)}")
+        raise
+
+def select_product_and_add_to_cart(product_name):
+    """Select a specific product and add to cart"""
+    try:
+        # Find product by name
+        product_card = waitForObject(f":*{product_name}*_QWidget", 5000)
+        
+        # Click on product to view details
+        mouseClick(product_card)
+        
+        # Wait for product details page
+        product_details = waitForObject(":ProductDetails_QWidget", 5000)
+        test.verify(product_details.visible, "Product details page opened")
+        
+        # Add to cart
+        add_to_cart_button = findObject(":AddToCart_QPushButton")
+        test.verify(add_to_cart_button.enabled, "Add to cart button is enabled")
+        clickButton(add_to_cart_button)
+        
+        # Verify cart count updated
+        cart_count = findObject(":CartCount_QLabel")
+        test.verify(int(cart_count.text) > 0, "Cart count updated")
+        
+    except Exception as e:
+        test.fail(f"Add to cart failed: {str(e)}")
+        raise
+
+def proceed_to_checkout():
+    """Navigate to checkout page"""
+    try:
+        # Open cart
+        cart_button = findObject(":Cart_QPushButton")
+        clickButton(cart_button)
+        
+        # Wait for cart page
+        cart_page = waitForObject(":CartPage_QWidget", 5000)
+        test.verify(cart_page.visible, "Cart page opened")
+        
+        # Proceed to checkout
+        checkout_button = findObject(":Checkout_QPushButton")
+        test.verify(checkout_button.enabled, "Checkout button is enabled")
+        clickButton(checkout_button)
+        
+        # Wait for checkout page
+        checkout_page = waitForObject(":CheckoutPage_QWidget", 5000)
+        test.verify(checkout_page.visible, "Checkout page opened")
+        
+    except Exception as e:
+        test.fail(f"Checkout navigation failed: {str(e)}")
+        raise
+
+def fill_shipping_information(shipping_info):
+    """Fill shipping information form"""
+    try:
+        # Fill shipping form
+        fields = {
+            ":FirstName_QLineEdit": shipping_info["first_name"],
+            ":LastName_QLineEdit": shipping_info["last_name"],
+            ":Address_QLineEdit": shipping_info["address"],
+            ":City_QLineEdit": shipping_info["city"],
+            ":ZipCode_QLineEdit": shipping_info["zip_code"]
+        }
+        
+        for field_name, value in fields.items():
+            field = waitForObject(field_name, 3000)
+            field.clear()
+            type(field, value)
+            
+        # Continue to payment
+        continue_button = findObject(":ContinueToPayment_QPushButton")
+        clickButton(continue_button)
+        
+    except Exception as e:
+        test.fail(f"Shipping information failed: {str(e)}")
+        raise
+
+def select_payment_method(payment_type):
+    """Select payment method"""
+    try:
+        payment_page = waitForObject(":PaymentPage_QWidget", 5000)
+        test.verify(payment_page.visible, "Payment page opened")
+        
+        if payment_type == "credit_card":
+            credit_card_radio = findObject(":CreditCard_QRadioButton")
+            mouseClick(credit_card_radio)
+            
+            # Fill credit card details (test data)
+            card_number = findObject(":CardNumber_QLineEdit")
+            type(card_number, "4111111111111111")  # Test card number
+            
+            expiry = findObject(":Expiry_QLineEdit")
+            type(expiry, "12/25")
+            
+            cvv = findObject(":CVV_QLineEdit")
+            type(cvv, "123")
+            
+    except Exception as e:
+        test.fail(f"Payment method selection failed: {str(e)}")
+        raise
+
+def complete_purchase():
+    """Complete the purchase"""
+    try:
+        # Final purchase button
+        purchase_button = findObject(":CompletePurchase_QPushButton")
+        test.verify(purchase_button.enabled, "Purchase button is enabled")
+        clickButton(purchase_button)
+        
+        # Wait for processing
+        snooze(3)  # Allow processing time
+        
+    except Exception as e:
+        test.fail(f"Purchase completion failed: {str(e)}")
+        raise
+
+def verify_order_confirmation():
+    """Verify order confirmation page"""
+    try:
+        # Wait for confirmation page
+        confirmation_page = waitForObject(":OrderConfirmation_QWidget", 15000)
+        test.verify(confirmation_page.visible, "Order confirmation page displayed")
+        
+        # Verify order number is present
+        order_number = findObject(":OrderNumber_QLabel")
+        test.verify(order_number.text.startswith("Order #"), "Order number displayed")
+        
+        # Verify success message
+        success_message = findObject(":SuccessMessage_QLabel")
+        test.verify("Thank you" in success_message.text, "Success message displayed")
+        
+        test.log(f"Order completed successfully: {order_number.text}")
+        
+    except Exception as e:
+        test.fail(f"Order confirmation failed: {str(e)}")
+        raise
+
+def cleanup_test_data():
+    """Clean up test data"""
+    try:
+        # This would typically involve API calls to clean up test orders
+        test.log("Cleaning up test data...")
+        
+    except Exception as e:
+        test.log(f"Cleanup warning: {str(e)}")
+
+def take_screenshot(filename):
+    """Take screenshot for debugging"""
+    try:
+        import os
+        screenshot_path = os.path.join("screenshots", f"{filename}.png")
+        test.screenCapture(screenshot_path)
+        test.log(f"Screenshot saved: {screenshot_path}")
+    except Exception as e:
+        test.log(f"Screenshot failed: {str(e)}")
+</code></pre>
+                </div>
+                <div class="col-md-4">
+                    <h5>Key Features</h5>
+                    <ul>
+                        <li>Complete end-to-end flow</li>
+                        <li>Comprehensive error handling</li>
+                        <li>Data cleanup procedures</li>
+                        <li>Screenshot capture on failure</li>
+                        <li>Detailed logging and verification</li>
+                    </ul>
+                    
+                    <h5>Best Practices Demonstrated</h5>
+                    <ul>
+                        <li>Modular function design</li>
+                        <li>Timeout management</li>
+                        <li>Exception handling</li>
+                        <li>Test data management</li>
+                        <li>Progress verification</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Banking Application Testing -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h3 class="mb-0">
+                <i class="fas fa-university"></i> Banking Application Testing
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5>Scenario: Secure Money Transfer</h5>
+                    <p>
+                        This example shows testing a secure money transfer system with multiple authentication
+                        steps, validation checks, and security measures.
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-python">import squish
+import test
+import time
+import random
+
+def test_secure_money_transfer():
+    """Test secure money transfer with multiple authentication"""
+    try:
+        startApplication("banking-app")
+        
+        # Step 1: Secure login with 2FA
+        secure_login("user123", "password456")
+        
+        # Step 2: Navigate to transfer section
+        navigate_to_transfers()
+        
+        # Step 3: Create transfer request
+        create_transfer_request({
+            "recipient_account": "9876543210",
+            "amount": 500.00,
+            "description": "Monthly rent payment"
+        })
+        
+        # Step 4: Verify transfer details
+        verify_transfer_details()
+        
+        # Step 5: Confirm with OTP
+        confirm_transfer_with_otp()
+        
+        # Step 6: Verify transaction completion
+        verify_transaction_completion()
+        
+        test.log("Money transfer completed successfully")
+        
+    except Exception as e:
+        test.fail(f"Money transfer failed: {str(e)}")
+        take_screenshot("transfer_failure")
+    
+    finally:
+        secure_logout()
+        closeApplication()
+
+def secure_login(username, password):
+    """Secure login with 2FA"""
+    try:
+        # Enter credentials
+        username_field = waitForObject(":Username_QLineEdit", 5000)
+        password_field = waitForObject(":Password_QLineEdit", 5000)
+        
+        type(username_field, username)
+        type(password_field, password)
+        
+        # Submit login
+        login_button = findObject(":Login_QPushButton")
+        clickButton(login_button)
+        
+        # Handle 2FA
+        if waitForObject(":TwoFADialog_QDialog", 5000, False):
+            handle_two_factor_auth()
+        
+        # Verify successful login
+        dashboard = waitForObject(":Dashboard_QWidget", 10000)
+        test.verify(dashboard.visible, "Login successful")
+        
+    except Exception as e:
+        test.fail(f"Secure login failed: {str(e)}")
+        raise
+
+def handle_two_factor_auth():
+    """Handle two-factor authentication"""
+    try:
+        # Wait for 2FA prompt
+        tfa_dialog = waitForObject(":TwoFADialog_QDialog", 5000)
+        test.verify(tfa_dialog.visible, "2FA dialog appeared")
+        
+        # Simulate OTP input (in real scenario, this would come from external source)
+        otp_field = findObject(":OTP_QLineEdit")
+        type(otp_field, "123456")  # Test OTP
+        
+        # Submit OTP
+        verify_button = findObject(":VerifyOTP_QPushButton")
+        clickButton(verify_button)
+        
+        # Wait for verification
+        snooze(2)
+        
+    except Exception as e:
+        test.fail(f"2FA handling failed: {str(e)}")
+        raise
+
+def navigate_to_transfers():
+    """Navigate to transfer section"""
+    try:
+        # Click on transfers menu
+        transfers_menu = waitForObject(":Transfers_QAction", 5000)
+        mouseClick(transfers_menu)
+        
+        # Wait for transfers page
+        transfers_page = waitForObject(":TransfersPage_QWidget", 5000)
+        test.verify(transfers_page.visible, "Transfers page opened")
+        
+        # Click new transfer
+        new_transfer_button = findObject(":NewTransfer_QPushButton")
+        clickButton(new_transfer_button)
+        
+    except Exception as e:
+        test.fail(f"Transfer navigation failed: {str(e)}")
+        raise
+
+def create_transfer_request(transfer_data):
+    """Create a new transfer request"""
+    try:
+        # Wait for transfer form
+        transfer_form = waitForObject(":TransferForm_QWidget", 5000)
+        test.verify(transfer_form.visible, "Transfer form opened")
+        
+        # Fill recipient account
+        recipient_field = findObject(":RecipientAccount_QLineEdit")
+        type(recipient_field, transfer_data["recipient_account"])
+        
+        # Fill amount
+        amount_field = findObject(":Amount_QDoubleSpinBox")
+        amount_field.setValue(transfer_data["amount"])
+        
+        # Fill description
+        description_field = findObject(":Description_QTextEdit")
+        type(description_field, transfer_data["description"])
+        
+        # Proceed to review
+        review_button = findObject(":ReviewTransfer_QPushButton")
+        clickButton(review_button)
+        
+    except Exception as e:
+        test.fail(f"Transfer request creation failed: {str(e)}")
+        raise
+
+def verify_transfer_details():
+    """Verify transfer details on review page"""
+    try:
+        # Wait for review page
+        review_page = waitForObject(":TransferReview_QWidget", 5000)
+        test.verify(review_page.visible, "Transfer review page opened")
+        
+        # Verify recipient account
+        recipient_display = findObject(":RecipientDisplay_QLabel")
+        test.verify("9876543210" in recipient_display.text, "Recipient account correct")
+        
+        # Verify amount
+        amount_display = findObject(":AmountDisplay_QLabel")
+        test.verify("500.00" in amount_display.text, "Amount correct")
+        
+        # Verify fees calculation
+        fees_display = findObject(":FeesDisplay_QLabel")
+        test.verify(fees_display.visible, "Fees displayed")
+        
+        # Verify total amount
+        total_display = findObject(":TotalDisplay_QLabel")
+        test.verify(total_display.visible, "Total amount displayed")
+        
+    except Exception as e:
+        test.fail(f"Transfer details verification failed: {str(e)}")
+        raise
+
+def confirm_transfer_with_otp():
+    """Confirm transfer with OTP"""
+    try:
+        # Click confirm button
+        confirm_button = findObject(":ConfirmTransfer_QPushButton")
+        clickButton(confirm_button)
+        
+        # Wait for OTP dialog
+        otp_dialog = waitForObject(":OTPConfirmation_QDialog", 5000)
+        test.verify(otp_dialog.visible, "OTP confirmation dialog opened")
+        
+        # Enter OTP (simulation)
+        otp_field = findObject(":TransferOTP_QLineEdit")
+        type(otp_field, "789012")  # Test OTP
+        
+        # Submit OTP
+        submit_otp_button = findObject(":SubmitOTP_QPushButton")
+        clickButton(submit_otp_button)
+        
+        # Wait for processing
+        snooze(5)  # Allow processing time
+        
+    except Exception as e:
+        test.fail(f"OTP confirmation failed: {str(e)}")
+        raise
+
+def verify_transaction_completion():
+    """Verify transaction completion"""
+    try:
+        # Wait for completion page
+        completion_page = waitForObject(":TransactionComplete_QWidget", 10000)
+        test.verify(completion_page.visible, "Transaction completion page displayed")
+        
+        # Verify transaction ID
+        transaction_id = findObject(":TransactionID_QLabel")
+        test.verify(transaction_id.text.startswith("TXN"), "Transaction ID generated")
+        
+        # Verify success message
+        success_message = findObject(":SuccessMessage_QLabel")
+        test.verify("successfully transferred" in success_message.text.lower(), 
+                   "Success message displayed")
+        
+        # Verify receipt option
+        receipt_button = findObject(":DownloadReceipt_QPushButton")
+        test.verify(receipt_button.visible, "Receipt download option available")
+        
+        test.log(f"Transaction completed: {transaction_id.text}")
+        
+    except Exception as e:
+        test.fail(f"Transaction completion verification failed: {str(e)}")
+        raise
+
+def secure_logout():
+    """Secure logout procedure"""
+    try:
+        # Access user menu
+        user_menu = findObject(":UserMenu_QAction")
+        mouseClick(user_menu)
+        
+        # Click logout
+        logout_option = findObject(":Logout_QAction")
+        mouseClick(logout_option)
+        
+        # Confirm logout if required
+        if waitForObject(":LogoutConfirmation_QDialog", 2000, False):
+            confirm_button = findObject(":ConfirmLogout_QPushButton")
+            clickButton(confirm_button)
+        
+        # Verify logout
+        login_page = waitForObject(":LoginPage_QWidget", 5000)
+        test.verify(login_page.visible, "Logout successful")
+        
+    except Exception as e:
+        test.log(f"Logout procedure failed: {str(e)}")
+</code></pre>
+                </div>
+                <div class="col-md-4">
+                    <h5>Security Features Tested</h5>
+                    <ul>
+                        <li>Two-factor authentication</li>
+                        <li>OTP verification</li>
+                        <li>Secure logout procedures</li>
+                        <li>Transaction verification</li>
+                        <li>Session management</li>
+                    </ul>
+                    
+                    <h5>Banking-Specific Validations</h5>
+                    <ul>
+                        <li>Account number validation</li>
+                        <li>Amount verification</li>
+                        <li>Fee calculations</li>
+                        <li>Transaction limits</li>
+                        <li>Receipt generation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Healthcare Application Testing -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h3 class="mb-0">
+                <i class="fas fa-heartbeat"></i> Healthcare Application Testing
+            </h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5>Scenario: Patient Management System</h5>
+                    <p>
+                        Testing a patient management system with compliance requirements, data validation,
+                        and integration with medical devices.
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-python">import squish
+import test
+import datetime
+
+def test_patient_management_workflow():
+    """Test complete patient management workflow"""
+    try:
+        startApplication("healthcare-app")
+        
+        # Step 1: Staff login with role verification
+        staff_login("dr.smith", "medical123", "doctor")
+        
+        # Step 2: Create new patient record
+        patient_data = create_patient_record({
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "dob": "1985-05-15",
+            "ssn": "123-45-6789",
+            "insurance": "Blue Cross",
+            "emergency_contact": "John Doe - 555-1234"
+        })
+        
+        # Step 3: Schedule appointment
+        schedule_appointment(patient_data["patient_id"], "2024-01-15", "10:00")
+        
+        # Step 4: Record vital signs
+        record_vital_signs(patient_data["patient_id"], {
+            "blood_pressure": "120/80",
+            "heart_rate": "72",
+            "temperature": "98.6",
+            "weight": "150"
+        })
+        
+        # Step 5: Create medical notes
+        create_medical_notes(patient_data["patient_id"], 
+                           "Patient reports mild headache. Vital signs normal.")
+        
+        # Step 6: Prescribe medication
+        prescribe_medication(patient_data["patient_id"], {
+            "medication": "Ibuprofen",
+            "dosage": "200mg",
+            "frequency": "Every 6 hours as needed",
+            "duration": "5 days"
+        })
+        
+        # Step 7: Generate and verify reports
+        generate_patient_report(patient_data["patient_id"])
+        
+        test.log("Patient management workflow completed successfully")
+        
+    except Exception as e:
+        test.fail(f"Patient management workflow failed: {str(e)}")
+        audit_log_error(str(e))
+    
+    finally:
+        secure_logout()
+        closeApplication()
+
+def staff_login(username, password, expected_role):
+    """Staff login with role verification"""
+    try:
+        # Standard login
+        username_field = waitForObject(":Username_QLineEdit", 5000)
+        password_field = waitForObject(":Password_QLineEdit", 5000)
+        
+        type(username_field, username)
+        type(password_field, password)
+        
+        login_button = findObject(":Login_QPushButton")
+        clickButton(login_button)
+        
+        # Verify role-based access
+        dashboard = waitForObject(":Dashboard_QWidget", 10000)
+        test.verify(dashboard.visible, "Dashboard loaded")
+        
+        # Check role display
+        role_display = findObject(":UserRole_QLabel")
+        test.verify(expected_role.lower() in role_display.text.lower(), 
+                   f"User role is {expected_role}")
+        
+        # Verify role-specific menu items
+        if expected_role == "doctor":
+            test.verify(findObject(":Prescriptions_QAction").visible, 
+                       "Doctor has prescription access")
+        
+    except Exception as e:
+        test.fail(f"Staff login failed: {str(e)}")
+        raise
+
+def create_patient_record(patient_info):
+    """Create new patient record with validation"""
+    try:
+        # Navigate to patient management
+        patients_menu = findObject(":Patients_QAction")
+        mouseClick(patients_menu)
+        
+        # Click new patient
+        new_patient_button = findObject(":NewPatient_QPushButton")
+        clickButton(new_patient_button)
+        
+        # Wait for patient form
+        patient_form = waitForObject(":PatientForm_QWidget", 5000)
+        test.verify(patient_form.visible, "Patient form opened")
+        
+        # Fill patient information
+        fill_patient_form(patient_info)
+        
+        # Submit form
+        save_button = findObject(":SavePatient_QPushButton")
+        clickButton(save_button)
+        
+        # Wait for confirmation and get patient ID
+        success_dialog = waitForObject(":PatientSaved_QDialog", 5000)
+        test.verify(success_dialog.visible, "Patient record saved")
+        
+        patient_id_label = findObject(":PatientID_QLabel")
+        patient_id = patient_id_label.text
+        
+        # Close confirmation
+        ok_button = findObject(":OK_QPushButton")
+        clickButton(ok_button)
+        
+        test.log(f"Patient record created with ID: {patient_id}")
+        
+        return {"patient_id": patient_id}
+        
+    except Exception as e:
+        test.fail(f"Patient record creation failed: {str(e)}")
+        raise
+
+def fill_patient_form(patient_info):
+    """Fill patient form with validation"""
+    try:
+        # Fill basic information
+        fields = {
+            ":FirstName_QLineEdit": patient_info["first_name"],
+            ":LastName_QLineEdit": patient_info["last_name"],
+            ":SSN_QLineEdit": patient_info["ssn"],
+            ":Insurance_QLineEdit": patient_info["insurance"],
+            ":EmergencyContact_QLineEdit": patient_info["emergency_contact"]
+        }
+        
+        for field_name, value in fields.items():
+            field = findObject(field_name)
+            field.clear()
+            type(field, value)
+        
+        # Handle date of birth
+        dob_field = findObject(":DateOfBirth_QDateEdit")
+        dob_date = datetime.datetime.strptime(patient_info["dob"], "%Y-%m-%d").date()
+        dob_field.setDate(dob_date)
+        
+        # Validate required fields
+        validate_required_fields()
+        
+    except Exception as e:
+        test.fail(f"Patient form filling failed: {str(e)}")
+        raise
+
+def validate_required_fields():
+    """Validate required fields are filled"""
+    try:
+        # Check for validation errors
+        error_labels = findChildren(findObject(":PatientForm_QWidget"), 
+                                  {"type": "QLabel", "styleSheet": "*color: red*"})
+        
+        test.verify(len(error_labels) == 0, "No validation errors")
+        
+        # Check save button is enabled
+        save_button = findObject(":SavePatient_QPushButton")
+        test.verify(save_button.enabled, "Save button is enabled")
+        
+    except Exception as e:
+        test.fail(f"Field validation failed: {str(e)}")
+        raise
+
+def schedule_appointment(patient_id, date, time):
+    """Schedule patient appointment"""
+    try:
+        # Navigate to appointments
+        appointments_menu = findObject(":Appointments_QAction")
+        mouseClick(appointments_menu)
+        
+        # Click new appointment
+        new_appointment_button = findObject(":NewAppointment_QPushButton")
+        clickButton(new_appointment_button)
+        
+        # Fill appointment details
+        patient_search = findObject(":PatientSearch_QLineEdit")
+        type(patient_search, patient_id)
+        
+        # Select patient from dropdown
+        patient_item = waitForObject(f":*{patient_id}*_QListWidgetItem", 3000)
+        mouseClick(patient_item)
+        
+        # Set date and time
+        date_field = findObject(":AppointmentDate_QDateEdit")
+        appointment_date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+        date_field.setDate(appointment_date)
+        
+        time_field = findObject(":AppointmentTime_QTimeEdit")
+        appointment_time = datetime.datetime.strptime(time, "%H:%M").time()
+        time_field.setTime(appointment_time)
+        
+        # Save appointment
+        save_appointment_button = findObject(":SaveAppointment_QPushButton")
+        clickButton(save_appointment_button)
+        
+        # Verify appointment created
+        confirmation = waitForObject(":AppointmentSaved_QDialog", 5000)
+        test.verify(confirmation.visible, "Appointment scheduled successfully")
+        
+        ok_button = findObject(":OK_QPushButton")
+        clickButton(ok_button)
+        
+    except Exception as e:
+        test.fail(f"Appointment scheduling failed: {str(e)}")
+        raise
+
+def record_vital_signs(patient_id, vitals):
+    """Record patient vital signs"""
+    try:
+        # Navigate to patient record
+        navigate_to_patient_record(patient_id)
+        
+        # Click vital signs tab
+        vitals_tab = findObject(":VitalSigns_QTabWidget")
+        mouseClick(vitals_tab)
+        
+        # Click new vital signs
+        new_vitals_button = findObject(":NewVitalSigns_QPushButton")
+        clickButton(new_vitals_button)
+        
+        # Fill vital signs
+        fields = {
+            ":BloodPressure_QLineEdit": vitals["blood_pressure"],
+            ":HeartRate_QSpinBox": vitals["heart_rate"],
+            ":Temperature_QDoubleSpinBox": vitals["temperature"],
+            ":Weight_QDoubleSpinBox": vitals["weight"]
+        }
+        
+        for field_name, value in fields.items():
+            field = findObject(field_name)
+            if hasattr(field, 'setValue'):
+                field.setValue(float(value))
+            else:
+                field.clear()
+                type(field, value)
+        
+        # Save vital signs
+        save_vitals_button = findObject(":SaveVitalSigns_QPushButton")
+        clickButton(save_vitals_button)
+        
+        # Verify vital signs saved
+        vitals_list = findObject(":VitalSignsList_QListWidget")
+        test.verify(vitals_list.count > 0, "Vital signs recorded")
+        
+    except Exception as e:
+        test.fail(f"Vital signs recording failed: {str(e)}")
+        raise
+
+def audit_log_error(error_message):
+    """Log error to audit trail"""
+    try:
+        # This would integrate with the application's audit system
+        test.log(f"AUDIT: Error logged - {error_message}")
+    except Exception as e:
+        test.log(f"Audit logging failed: {str(e)}")
+</code></pre>
+                </div>
+                <div class="col-md-4">
+                    <h5>Healthcare Compliance Features</h5>
+                    <ul>
+                        <li>HIPAA compliance validation</li>
+                        <li>Role-based access control</li>
+                        <li>Audit trail logging</li>
+                        <li>Data encryption verification</li>
+                        <li>Patient privacy protection</li>
+                    </ul>
+                    
+                    <h5>Medical Data Validation</h5>
+                    <ul>
+                        <li>Vital signs range checking</li>
+                        <li>Medication dosage verification</li>
+                        <li>Allergy conflict detection</li>
+                        <li>Insurance verification</li>
+                        <li>Emergency contact validation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Best Practices Summary -->
+    <div class="row mt-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-star"></i> Real-World Testing Best Practices
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Code Organization</h5>
+                            <ul>
+                                <li>Modular function design</li>
+                                <li>Comprehensive error handling</li>
+                                <li>Clear logging and documentation</li>
+                                <li>Reusable helper functions</li>
+                            </ul>
+                            
+                            <h5>Data Management</h5>
+                            <ul>
+                                <li>Test data isolation</li>
+                                <li>Cleanup procedures</li>
+                                <li>Data validation checks</li>
+                                <li>Secure test credentials</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Reliability</h5>
+                            <ul>
+                                <li>Robust wait strategies</li>
+                                <li>Retry mechanisms</li>
+                                <li>Graceful failure handling</li>
+                                <li>Screenshot capture on errors</li>
+                            </ul>
+                            
+                            <h5>Maintenance</h5>
+                            <ul>
+                                <li>Version control integration</li>
+                                <li>CI/CD pipeline compatibility</li>
+                                <li>Regular test reviews</li>
+                                <li>Performance monitoring</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Add syntax highlighting and interactive features
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add copy buttons to code blocks
+        document.querySelectorAll('pre.code-block').forEach(pre => {
+            const copyButton = document.createElement('button');
+            copyButton.className = 'btn btn-sm btn-outline-secondary position-absolute';
+            copyButton.style.top = '10px';
+            copyButton.style.right = '10px';
+            copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+            copyButton.onclick = function() {
+                const code = pre.querySelector('code').textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    copyButton.innerHTML = '<i class="fas fa-check"></i>';
+                    setTimeout(() => {
+                        copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+                    }, 2000);
+                });
+            };
+            
+            pre.style.position = 'relative';
+            pre.appendChild(copyButton);
+        });
+    });
+</script>
+{% endblock %}

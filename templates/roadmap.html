@@ -1,0 +1,477 @@
+{% extends "base.html" %}
+
+{% block title %}Learning Roadmap - Squish Testing Portal{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="mb-4">Squish Testing Learning Roadmap</h1>
+            <p class="lead mb-5">
+                Follow this structured path to master Squish testing from beginner to expert level.
+            </p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <!-- Phase 1: Foundation -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-play-circle"></i> Phase 1: Foundation (Week 1-2)
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Learning Objectives</h5>
+                            <ul>
+                                <li>Understand GUI testing concepts</li>
+                                <li>Set up Squish environment</li>
+                                <li>Learn basic object identification</li>
+                                <li>Write your first test script</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Resources</h5>
+                            <ul>
+                                <li><a href="{{ url_for('study_guide') }}#introduction">Introduction to Squish</a></li>
+                                <li><a href="{{ url_for('study_guide') }}#getting-started">Getting Started Guide</a></li>
+                                <li><a href="{{ url_for('api_reference') }}#object-identification">Object Identification API</a></li>
+                                <li><a href="{{ url_for('code_examples') }}">Basic Code Examples</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <h5>Milestones</h5>
+                        <div class="row">
+                            <div class="col-md-4 mb-2">
+                                <div class="milestone-item">
+                                    <input type="checkbox" class="form-check-input me-2" id="milestone1">
+                                    <label for="milestone1">Install and configure Squish</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="milestone-item">
+                                    <input type="checkbox" class="form-check-input me-2" id="milestone2">
+                                    <label for="milestone2">Create first test suite</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="milestone-item">
+                                    <input type="checkbox" class="form-check-input me-2" id="milestone3">
+                                    <label for="milestone3">Write basic interaction test</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Phase 2: Core Skills -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-cog"></i> Phase 2: Core Skills (Week 3-4)
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Learning Objectives</h5>
+                            <ul>
+                                <li>Master object identification methods</li>
+                                <li>Learn user interaction simulation</li>
+                                <li>Understand verification techniques</li>
+                                <li>Handle dynamic UI elements</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Resources</h5>
+                            <ul>
+                                <li><a href="{{ url_for('study_guide') }}#object-identification">Object Identification</a></li>
+                                <li><a href="{{ url_for('study_guide') }}#user-interactions">User Interactions</a></li>
+                                <li><a href="{{ url_for('study_guide') }}#verification-testing">Verification Methods</a></li>
+                                <li><a href="{{ url_for('api_reference') }}#verification">Verification API</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <h5>Milestones</h5>
+                        <div class="row">
+                            <div class="col-md-4 mb-2">
+                                <div class="milestone-item">
+                                    <input type="checkbox" class="form-check-input me-2" id="milestone4">
+                                    <label for="milestone4">Use property-based identification</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="milestone-item">
+                                    <input type="checkbox" class="form-check-input me-2" id="milestone5">
+                                    <label for="milestone5">Create form interaction test</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="milestone-item">
+                                    <input type="checkbox" class="form-check-input me-2" id="milestone6">
+                                    <label for="milestone6">Implement verification points</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Phase 3: Intermediate -->
+            <div class="card mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="mb-0">
+                        <i class="fas fa-chart-line"></i> Phase 3: Intermediate (Week 5-6)
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Learning Objectives</h5>
+                            <ul>
+                                <li>Data-driven testing techniques</li>
+                                <li>Test organization and structure</li>
+                                <li>Error handling and debugging</li>
+                                <li>Image-based verification</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Resources</h5>
+                            <ul>
+                                <li><a href="{{ url_for('study_guide') }}#data-driven-testing">Data-Driven Testing</a></li>
+                                <li><a href="{{ url_for('api_reference') }}#data-handling">Data Handling API</a></li>
+                                <li><a href="{{ url_for('api_reference') }}#image-verification">Image Verification</a></li>
+                                <li><a href="{{ url_for('code_examples') }}">Intermediate Examples</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <h5>Milestones</h5>
+                        <div class="row">
+                            <div class="col-md-4 mb-2">
+                                <div class="milestone-item">
+                                    <input type="checkbox" class="form-check-input me-2" id="milestone7">
+                                    <label for="milestone7">Create data-driven test</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="milestone-item">
+                                    <input type="checkbox" class="form-check-input me-2" id="milestone8">
+                                    <label for="milestone8">Implement error handling</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="milestone-item">
+                                    <input type="checkbox" class="form-check-input me-2" id="milestone9">
+                                    <label for="milestone9">Use image verification</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Phase 4: Advanced -->
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-graduation-cap"></i> Phase 4: Advanced (Week 7-8)
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Learning Objectives</h5>
+                            <ul>
+                                <li>Advanced scripting techniques</li>
+                                <li>Custom functions and libraries</li>
+                                <li>Performance testing concepts</li>
+                                <li>Integration with CI/CD</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Resources</h5>
+                            <ul>
+                                <li><a href="{{ url_for('study_guide') }}#advanced-topics">Advanced Topics</a></li>
+                                <li><a href="{{ url_for('real_examples') }}">Real-World Examples</a></li>
+                                <li><a href="{{ url_for('api_reference') }}#utility-functions">Utility Functions</a></li>
+                                <li><a href="{{ url_for('study_guide') }}#best-practices">Best Practices</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <h5>Milestones</h5>
+                        <div class="row">
+                            <div class="col-md-4 mb-2">
+                                <div class="milestone-item">
+                                    <input type="checkbox" class="form-check-input me-2" id="milestone10">
+                                    <label for="milestone10">Create custom test library</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="milestone-item">
+                                    <input type="checkbox" class="form-check-input me-2" id="milestone11">
+                                    <label for="milestone11">Implement page object pattern</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="milestone-item">
+                                    <input type="checkbox" class="form-check-input me-2" id="milestone12">
+                                    <label for="milestone12">Set up CI/CD integration</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Phase 5: Expert -->
+            <div class="card mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-star"></i> Phase 5: Expert (Week 9-10)
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Learning Objectives</h5>
+                            <ul>
+                                <li>Enterprise-level test frameworks</li>
+                                <li>Advanced debugging techniques</li>
+                                <li>Performance optimization</li>
+                                <li>Test maintenance strategies</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Resources</h5>
+                            <ul>
+                                <li><a href="{{ url_for('real_examples') }}">Production Examples</a></li>
+                                <li><a href="{{ url_for('study_guide') }}#troubleshooting">Troubleshooting Guide</a></li>
+                                <li><a href="{{ url_for('study_guide') }}#best-practices">Best Practices</a></li>
+                                <li>Community Forums and Documentation</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <h5>Milestones</h5>
+                        <div class="row">
+                            <div class="col-md-4 mb-2">
+                                <div class="milestone-item">
+                                    <input type="checkbox" class="form-check-input me-2" id="milestone13">
+                                    <label for="milestone13">Build enterprise test suite</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="milestone-item">
+                                    <input type="checkbox" class="form-check-input me-2" id="milestone14">
+                                    <label for="milestone14">Optimize test performance</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="milestone-item">
+                                    <input type="checkbox" class="form-check-input me-2" id="milestone15">
+                                    <label for="milestone15">Mentor other testers</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Progress Summary -->
+    <div class="row mt-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Your Progress</h3>
+                </div>
+                <div class="card-body">
+                    <div class="progress-indicator mb-3">
+                        <div class="progress-bar" style="width: 0%" id="overall-progress"></div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Foundation</h5>
+                                    <p class="card-text">
+                                        <span id="phase1-progress">0</span>/3 Complete
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-success">Core Skills</h5>
+                                    <p class="card-text">
+                                        <span id="phase2-progress">0</span>/3 Complete
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-warning">Intermediate</h5>
+                                    <p class="card-text">
+                                        <span id="phase3-progress">0</span>/3 Complete
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-info">Advanced</h5>
+                                    <p class="card-text">
+                                        <span id="phase4-progress">0</span>/3 Complete
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Study Tips -->
+    <div class="row mt-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">
+                        <i class="fas fa-lightbulb"></i> Study Tips
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>For Beginners</h5>
+                            <ul>
+                                <li>Start with simple applications</li>
+                                <li>Focus on understanding concepts</li>
+                                <li>Practice object identification daily</li>
+                                <li>Join the Squish community forums</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>For Advanced Users</h5>
+                            <ul>
+                                <li>Contribute to open-source projects</li>
+                                <li>Mentor other testers</li>
+                                <li>Stay updated with new features</li>
+                                <li>Build custom testing frameworks</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Load progress from localStorage
+    let milestoneProgress = JSON.parse(localStorage.getItem('milestoneProgress') || '{}');
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+        loadProgress();
+        updateProgressDisplay();
+        
+        // Add event listeners to checkboxes
+        document.querySelectorAll('.milestone-item input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                milestoneProgress[this.id] = this.checked;
+                localStorage.setItem('milestoneProgress', JSON.stringify(milestoneProgress));
+                updateProgressDisplay();
+            });
+        });
+    });
+    
+    function loadProgress() {
+        // Set checkbox states from localStorage
+        Object.keys(milestoneProgress).forEach(milestoneId => {
+            const checkbox = document.getElementById(milestoneId);
+            if (checkbox) {
+                checkbox.checked = milestoneProgress[milestoneId];
+            }
+        });
+    }
+    
+    function updateProgressDisplay() {
+        // Calculate phase progress
+        const phases = [
+            { ids: ['milestone1', 'milestone2', 'milestone3'], element: 'phase1-progress' },
+            { ids: ['milestone4', 'milestone5', 'milestone6'], element: 'phase2-progress' },
+            { ids: ['milestone7', 'milestone8', 'milestone9'], element: 'phase3-progress' },
+            { ids: ['milestone10', 'milestone11', 'milestone12'], element: 'phase4-progress' },
+            { ids: ['milestone13', 'milestone14', 'milestone15'], element: 'phase5-progress' }
+        ];
+        
+        let totalCompleted = 0;
+        let totalMilestones = 15;
+        
+        phases.forEach(phase => {
+            const completed = phase.ids.filter(id => milestoneProgress[id]).length;
+            document.getElementById(phase.element).textContent = completed;
+            totalCompleted += completed;
+        });
+        
+        // Update overall progress
+        const overallPercentage = (totalCompleted / totalMilestones) * 100;
+        document.getElementById('overall-progress').style.width = overallPercentage + '%';
+        
+        // Achievement notifications
+        if (overallPercentage === 100) {
+            showAchievement('Congratulations! You\'ve completed the entire roadmap!');
+        } else if (overallPercentage >= 75) {
+            showAchievement('Great progress! You\'re almost there!');
+        } else if (overallPercentage >= 50) {
+            showAchievement('Halfway there! Keep up the good work!');
+        } else if (overallPercentage >= 25) {
+            showAchievement('Good start! You\'re on the right track!');
+        }
+    }
+    
+    function showAchievement(message) {
+        // Simple achievement notification
+        const achievement = document.createElement('div');
+        achievement.className = 'alert alert-success alert-dismissible fade show position-fixed';
+        achievement.style.top = '20px';
+        achievement.style.right = '20px';
+        achievement.style.zIndex = '1050';
+        achievement.innerHTML = `
+            <strong>Achievement Unlocked!</strong> ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(achievement);
+        
+        // Auto-dismiss after 5 seconds
+        setTimeout(() => {
+            if (achievement.parentNode) {
+                achievement.parentNode.removeChild(achievement);
+            }
+        }, 5000);
+    }
+</script>
+{% endblock %}

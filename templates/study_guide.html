@@ -1,0 +1,714 @@
+{% extends "base.html" %}
+
+{% block title %}Study Guide - Squish Testing Portal{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="sidebar">
+                <h5>Study Guide</h5>
+                
+                <!-- Enhanced Progress Section -->
+                <div class="progress-section mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0">Progress</h6>
+                        <span class="badge bg-primary" id="progress-percentage">0%</span>
+                    </div>
+                    
+                    <div class="progress-indicator mb-3">
+                        <div class="progress-bar" style="width: 0%" id="main-progress-bar"></div>
+                    </div>
+                    
+                    <div class="text-center mb-3">
+                        <small class="text-muted">
+                            <span id="completed-sections">0</span> of <span id="total-sections">6</span> sections completed
+                        </small>
+                    </div>
+                    
+                    <!-- Milestone Badges -->
+                    <div class="milestone-badges">
+                        <h6 class="mb-2">Milestones</h6>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="milestone-badge" id="milestone-beginner">
+                                    <div class="badge-icon">
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <div class="badge-text">
+                                        <small>Beginner</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="milestone-badge" id="milestone-intermediate">
+                                    <div class="badge-icon">
+                                        <i class="fas fa-medal"></i>
+                                    </div>
+                                    <div class="badge-text">
+                                        <small>Intermediate</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="milestone-badge" id="milestone-advanced">
+                                    <div class="badge-icon">
+                                        <i class="fas fa-trophy"></i>
+                                    </div>
+                                    <div class="badge-text">
+                                        <small>Advanced</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="milestone-badge" id="milestone-expert">
+                                    <div class="badge-icon">
+                                        <i class="fas fa-crown"></i>
+                                    </div>
+                                    <div class="badge-text">
+                                        <small>Expert</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="#introduction">1. Introduction</a>
+                    <a class="nav-link" href="#getting-started">2. Getting Started</a>
+                    <a class="nav-link" href="#basic-concepts">3. Basic Concepts</a>
+                    <a class="nav-link" href="#object-identification">4. Object Identification</a>
+                    <a class="nav-link" href="#user-interactions">5. User Interactions</a>
+                    <a class="nav-link" href="#verification-testing">6. Verification & Testing</a>
+                    <a class="nav-link" href="#data-driven-testing">7. Data-Driven Testing</a>
+                    <a class="nav-link" href="#advanced-topics">8. Advanced Topics</a>
+                    <a class="nav-link" href="#best-practices">9. Best Practices</a>
+                    <a class="nav-link" href="#troubleshooting">10. Troubleshooting</a>
+                </nav>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            <div class="py-4">
+                <h1>Squish Testing Study Guide</h1>
+                <p class="lead">
+                    A comprehensive guide to mastering Squish automated testing from basics to advanced concepts.
+                </p>
+                
+                <!-- Introduction -->
+                <section id="introduction" class="mb-5">
+                    <h2>1. Introduction to Squish</h2>
+                    <p>
+                        Squish is a powerful GUI test automation tool that enables you to create, execute, and maintain 
+                        automated tests for applications built with various GUI frameworks including Qt, Java Swing, 
+                        Windows MFC, and more.
+                    </p>
+                    
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">What You'll Learn</h5>
+                            <ul>
+                                <li>How to set up and configure Squish for testing</li>
+                                <li>Core concepts of automated GUI testing</li>
+                                <li>Writing effective test scripts in Python</li>
+                                <li>Best practices for maintainable test suites</li>
+                                <li>Advanced testing techniques and patterns</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Prerequisites:</strong> Basic Python knowledge and familiarity with GUI applications.
+                    </div>
+                </section>
+                
+                <!-- Getting Started -->
+                <section id="getting-started" class="mb-5">
+                    <h2>2. Getting Started</h2>
+                    <p>
+                        Before diving into test creation, you need to set up your Squish environment properly.
+                    </p>
+                    
+                    <h4>Installation and Setup</h4>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h6>Step 1: Install Squish</h6>
+                            <p>Download and install Squish from the official Qt website. Choose the version that matches your target application framework.</p>
+                            
+                            <h6>Step 2: Configure Application Under Test (AUT)</h6>
+                            <p>Register your application with Squish using the Server Settings dialog.</p>
+                            
+                            <h6>Step 3: Create Your First Test Suite</h6>
+                            <p>Use the Squish IDE to create a new test suite and configure it for your application.</p>
+                        </div>
+                    </div>
+                    
+                    <h4>Your First Test</h4>
+                    <pre class="code-block"><code class="language-python">def main():
+    # Start the application
+    startApplication("myapp")
+    
+    # Wait for the main window
+    main_window = waitForObject(":MainWindow")
+    
+    # Perform basic interaction
+    button = findObject(":OK_QPushButton")
+    clickButton(button)
+    
+    # Close the application
+    closeApplication()
+</code></pre>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-success" onclick="markComplete('getting-started')">
+                            <i class="fas fa-check"></i> Mark as Complete
+                        </button>
+                    </div>
+                </section>
+                
+                <!-- Basic Concepts -->
+                <section id="basic-concepts" class="mb-5">
+                    <h2>3. Basic Concepts</h2>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-cube text-primary"></i> Objects
+                                    </h5>
+                                    <p class="card-text">
+                                        Everything in your GUI is an object - buttons, text fields, windows, etc. 
+                                        Each object has properties and methods you can use in tests.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-search text-success"></i> Object Names
+                                    </h5>
+                                    <p class="card-text">
+                                        Squish uses symbolic names to identify objects. These names are generated 
+                                        automatically or can be customized for better readability.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-play text-warning"></i> Test Scripts
+                                    </h5>
+                                    <p class="card-text">
+                                        Test scripts contain the commands that interact with your application. 
+                                        They can be recorded or written manually.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-check-circle text-info"></i> Verification Points
+                                    </h5>
+                                    <p class="card-text">
+                                        Verification points check that your application behaves as expected. 
+                                        They are essential for meaningful tests.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4>Key Terminology</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Term</th>
+                                    <th>Definition</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>AUT</strong></td>
+                                    <td>Application Under Test - the application you're testing</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Object Map</strong></td>
+                                    <td>A repository of object names and their properties</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Test Case</strong></td>
+                                    <td>A single test scenario with specific steps and expected results</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Test Suite</strong></td>
+                                    <td>A collection of related test cases</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Hook</strong></td>
+                                    <td>Code that runs before or after test execution</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-success" onclick="markComplete('basic-concepts')">
+                            <i class="fas fa-check"></i> Mark as Complete
+                        </button>
+                    </div>
+                </section>
+                
+                <!-- Object Identification -->
+                <section id="object-identification" class="mb-5">
+                    <h2>4. Object Identification</h2>
+                    <p>
+                        Reliable object identification is crucial for stable tests. Squish provides several methods 
+                        to identify objects in your application.
+                    </p>
+                    
+                    <h4>Methods of Object Identification</h4>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">1. Symbolic Names</h5>
+                            <p>The most common method, using descriptive names generated by Squish.</p>
+                            <pre class="code-block"><code class="language-python"># Using symbolic names
+button = findObject(":OK_QPushButton")
+text_field = findObject(":Username_QLineEdit")
+window = findObject(":MainWindow_QMainWindow")</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">2. Property-Based Identification</h5>
+                            <p>Using object properties for more flexible identification.</p>
+                            <pre class="code-block"><code class="language-python"># Using properties
+button = findObject({"type": "QPushButton", "text": "OK"})
+text_field = findObject({"type": "QLineEdit", "name": "usernameField"})
+window = findObject({"type": "QMainWindow", "visible": True})</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">3. Relative Identification</h5>
+                            <p>Finding objects relative to other objects in the hierarchy.</p>
+                            <pre class="code-block"><code class="language-python"># Relative identification
+dialog = findObject(":Settings_QDialog")
+button = findChild(dialog, {"type": "QPushButton", "text": "Apply"})
+
+# Using parent-child relationships
+parent = findObject(":MainWindow")
+child = findChild(parent, {"type": "QMenuBar"})</code></pre>
+                        </div>
+                    </div>
+                    
+                    <h4>Best Practices for Object Identification</h4>
+                    <div class="alert alert-warning">
+                        <ul class="mb-0">
+                            <li>Use stable properties that don't change between application versions</li>
+                            <li>Avoid using coordinates or pixel-based identification</li>
+                            <li>Keep object names descriptive and meaningful</li>
+                            <li>Use waitForObject() for objects that may not be immediately available</li>
+                            <li>Test object identification in different application states</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-success" onclick="markComplete('object-identification')">
+                            <i class="fas fa-check"></i> Mark as Complete
+                        </button>
+                    </div>
+                </section>
+                
+                <!-- User Interactions -->
+                <section id="user-interactions" class="mb-5">
+                    <h2>5. User Interactions</h2>
+                    <p>
+                        Learn how to simulate user actions like clicking, typing, and complex gestures.
+                    </p>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Mouse Interactions</h5>
+                                    <pre class="code-block"><code class="language-python"># Click operations
+clickButton(button)
+mouseClick(object)
+mouseDrag(source, target)
+mouseMove(object)
+
+# Different click types
+mouseClick(object, button=MouseButton.RightButton)
+mouseClick(object, modifier=Modifier.Ctrl)</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Keyboard Interactions</h5>
+                                    <pre class="code-block"><code class="language-python"># Text input
+type(text_field, "Hello World")
+nativeType("Text with <Tab> and <Return>")
+
+# Key combinations
+nativeType("<Ctrl+c>")
+nativeType("<Alt+F4>")
+
+# Special keys
+nativeType("<Escape>")
+nativeType("<F1>")</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4>Complex Interactions</h4>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Form Filling Example</h5>
+                            <pre class="code-block"><code class="language-python">def fill_login_form(username, password):
+    # Find form fields
+    username_field = findObject(":Username_QLineEdit")
+    password_field = findObject(":Password_QLineEdit")
+    login_button = findObject(":Login_QPushButton")
+    
+    # Clear existing content
+    username_field.clear()
+    password_field.clear()
+    
+    # Fill in the form
+    type(username_field, username)
+    type(password_field, password)
+    
+    # Submit the form
+    clickButton(login_button)
+    
+    # Wait for response
+    waitForObject(":Welcome_QLabel", 5000)</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-success" onclick="markComplete('user-interactions')">
+                            <i class="fas fa-check"></i> Mark as Complete
+                        </button>
+                    </div>
+                </section>
+                
+                <!-- Verification & Testing -->
+                <section id="verification-testing" class="mb-5">
+                    <h2>6. Verification & Testing</h2>
+                    <p>
+                        Verification is what makes your scripts actual tests. Learn different verification methods.
+                    </p>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Property Verification</h5>
+                                    <pre class="code-block"><code class="language-python"># Object properties
+test.verify(button.enabled)
+test.verify(label.visible)
+test.compare(text_field.text, "expected")
+
+# Object state
+test.verify(checkbox.checked)
+test.verify(not radio_button.checked)</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Existence Verification</h5>
+                                    <pre class="code-block"><code class="language-python"># Object existence
+test.verify(object.exists)
+test.verify(findObject(":Dialog").visible)
+
+# Negative verification
+test.verify(not error_dialog.visible)
+test.verify(not findObject(":Error").exists)</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Image Verification</h5>
+                                    <pre class="code-block"><code class="language-python"># Image-based verification
+test.imagePresent("expected_image.png")
+test.imagePresent("button_state.png", button)
+
+# Screen comparison
+test.screenCapture("current_state.png")
+test.compareImage("expected.png", "current.png")</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Pro Tip:</strong> Use meaningful verification messages to make test failures easier to diagnose.
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-success" onclick="markComplete('verification-testing')">
+                            <i class="fas fa-check"></i> Mark as Complete
+                        </button>
+                    </div>
+                </section>
+                
+                <!-- Continue with more sections... -->
+                <section id="data-driven-testing" class="mb-5">
+                    <h2>7. Data-Driven Testing</h2>
+                    <p>Learn how to create tests that work with multiple data sets.</p>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Using CSV Data</h5>
+                            <pre class="code-block"><code class="language-python">import testData
+
+def test_multiple_users():
+    # Load test data from CSV
+    users = testData.dataset("users.csv")
+    
+    for user in users:
+        username = user["username"]
+        password = user["password"]
+        expected_result = user["expected_result"]
+        
+        # Run test with current data
+        test_login(username, password, expected_result)</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-success" onclick="markComplete('data-driven-testing')">
+                            <i class="fas fa-check"></i> Mark as Complete
+                        </button>
+                    </div>
+                </section>
+                
+                <!-- More sections would follow... -->
+                <section id="best-practices" class="mb-5">
+                    <h2>9. Best Practices</h2>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Test Organization</h5>
+                                    <ul>
+                                        <li>Group related tests in suites</li>
+                                        <li>Use descriptive test names</li>
+                                        <li>Keep tests independent</li>
+                                        <li>Use setup and teardown functions</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Maintenance</h5>
+                                    <ul>
+                                        <li>Regular object map updates</li>
+                                        <li>Version control for test scripts</li>
+                                        <li>Code reviews for test changes</li>
+                                        <li>Continuous integration</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-success" onclick="markComplete('best-practices')">
+                            <i class="fas fa-check"></i> Mark as Complete
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let completedSections = JSON.parse(localStorage.getItem('completedSections') || '[]');
+    const totalSections = 6;
+    const sectionData = {
+        'getting-started': { title: 'Getting Started', order: 1 },
+        'basic-concepts': { title: 'Basic Concepts', order: 2 },
+        'object-identification': { title: 'Object Identification', order: 3 },
+        'user-interactions': { title: 'User Interactions', order: 4 },
+        'verification-testing': { title: 'Verification & Testing', order: 5 },
+        'data-driven-testing': { title: 'Data-Driven Testing', order: 6 },
+        'best-practices': { title: 'Best Practices', order: 7 }
+    };
+    
+    function markComplete(sectionId) {
+        if (!completedSections.includes(sectionId)) {
+            completedSections.push(sectionId);
+            localStorage.setItem('completedSections', JSON.stringify(completedSections));
+            updateProgress();
+            updateMilestones();
+            showAchievementNotification(sectionId);
+            
+            // Update button
+            const button = event.target.closest('button');
+            button.innerHTML = '<i class="fas fa-check"></i> Completed';
+            button.classList.remove('btn-success');
+            button.classList.add('btn-secondary');
+            button.disabled = true;
+        }
+    }
+    
+    function updateProgress() {
+        const completedCount = completedSections.length;
+        const percentage = Math.round((completedCount / totalSections) * 100);
+        
+        // Update progress bar
+        const progressBar = document.getElementById('main-progress-bar');
+        progressBar.style.width = percentage + '%';
+        
+        // Update progress text
+        document.getElementById('progress-percentage').textContent = percentage + '%';
+        document.getElementById('completed-sections').textContent = completedCount;
+        document.getElementById('total-sections').textContent = totalSections;
+        
+        // Update progress bar color based on completion
+        progressBar.classList.remove('bg-danger', 'bg-warning', 'bg-success');
+        if (percentage < 30) {
+            progressBar.classList.add('bg-danger');
+        } else if (percentage < 70) {
+            progressBar.classList.add('bg-warning');
+        } else {
+            progressBar.classList.add('bg-success');
+        }
+    }
+    
+    function updateMilestones() {
+        const completedCount = completedSections.length;
+        const milestones = [
+            { id: 'milestone-beginner', threshold: 2, name: 'Beginner' },
+            { id: 'milestone-intermediate', threshold: 4, name: 'Intermediate' },
+            { id: 'milestone-advanced', threshold: 6, name: 'Advanced' },
+            { id: 'milestone-expert', threshold: 7, name: 'Expert' }
+        ];
+        
+        milestones.forEach(milestone => {
+            const element = document.getElementById(milestone.id);
+            if (completedCount >= milestone.threshold) {
+                element.classList.add('earned');
+                element.setAttribute('title', `${milestone.name} milestone earned!`);
+            } else {
+                element.classList.remove('earned');
+                element.setAttribute('title', `Complete ${milestone.threshold} sections to earn ${milestone.name} milestone`);
+            }
+        });
+    }
+    
+    function showAchievementNotification(sectionId) {
+        const sectionTitle = sectionData[sectionId]?.title || 'Section';
+        const notification = document.createElement('div');
+        notification.className = 'achievement-notification';
+        notification.innerHTML = `
+            <div class="achievement-content">
+                <i class="fas fa-trophy"></i>
+                <div>
+                    <strong>Section Completed!</strong>
+                    <div>${sectionTitle}</div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Show notification
+        setTimeout(() => notification.classList.add('show'), 100);
+        
+        // Hide notification after 3 seconds
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => document.body.removeChild(notification), 300);
+        }, 3000);
+    }
+    
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+        updateProgress();
+        updateMilestones();
+        
+        // Mark completed sections
+        completedSections.forEach(sectionId => {
+            const button = document.querySelector(`button[onclick="markComplete('${sectionId}')"]`);
+            if (button) {
+                button.innerHTML = '<i class="fas fa-check"></i> Completed';
+                button.classList.remove('btn-success');
+                button.classList.add('btn-secondary');
+                button.disabled = true;
+            }
+        });
+        
+        // Sidebar navigation
+        document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+                
+                // Update active link
+                document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Update active link on scroll
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section[id]');
+            const scrollPos = window.scrollY + 100;
+            
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const height = section.offsetHeight;
+                const id = section.getAttribute('id');
+                
+                if (scrollPos >= top && scrollPos < top + height) {
+                    document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

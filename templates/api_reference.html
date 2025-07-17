@@ -1,0 +1,443 @@
+{% extends "base.html" %}
+
+{% block title %}API Reference - Squish Testing Portal{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="sidebar">
+                <h5>API Categories</h5>
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="#object-identification">Object Identification</a>
+                    <a class="nav-link" href="#object-interaction">Object Interaction</a>
+                    <a class="nav-link" href="#verification">Verification</a>
+                    <a class="nav-link" href="#application-control">Application Control</a>
+                    <a class="nav-link" href="#data-handling">Data Handling</a>
+                    <a class="nav-link" href="#image-verification">Image Verification</a>
+                    <a class="nav-link" href="#keyboard-mouse">Keyboard & Mouse</a>
+                    <a class="nav-link" href="#utility-functions">Utility Functions</a>
+                </nav>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            <div class="py-4">
+                <h1>Squish API Reference</h1>
+                <p class="lead">
+                    Complete reference for all Squish testing APIs with Python examples.
+                </p>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Note:</strong> This reference covers the most commonly used APIs. 
+                    For the complete documentation, visit the 
+                    <a href="https://doc.qt.io/squish/" target="_blank">official Squish documentation</a>.
+                </div>
+                
+                <!-- Object Identification -->
+                <section id="object-identification" class="mb-5">
+                    <h2>Object Identification</h2>
+                    <p>Functions for finding and identifying objects in your application.</p>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">findObject(objectName)</h5>
+                            <p class="card-text">
+                                Finds an object by its name or properties.
+                            </p>
+                            <strong>Parameters:</strong>
+                            <ul>
+                                <li><code>objectName</code> (str): The object name or property specification</li>
+                            </ul>
+                            <strong>Returns:</strong> Object reference
+                            <pre class="code-block mt-2"><code class="language-python"># Find by symbolic name
+button = findObject(":OK_QPushButton")
+
+# Find by properties
+text_field = findObject({"type": "QLineEdit", "name": "username"})
+
+# Find with wildcards
+dialog = findObject(":*_QDialog")</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">findChildren(parent, properties)</h5>
+                            <p class="card-text">
+                                Finds all child objects matching the specified properties.
+                            </p>
+                            <strong>Parameters:</strong>
+                            <ul>
+                                <li><code>parent</code> (Object): Parent object to search within</li>
+                                <li><code>properties</code> (dict): Properties to match</li>
+                            </ul>
+                            <strong>Returns:</strong> List of matching objects
+                            <pre class="code-block mt-2"><code class="language-python"># Find all buttons in a dialog
+dialog = findObject(":Settings_QDialog")
+buttons = findChildren(dialog, {"type": "QPushButton"})
+
+# Find all text fields
+text_fields = findChildren(dialog, {"type": "QLineEdit"})</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">waitForObject(objectName, timeout=20000)</h5>
+                            <p class="card-text">
+                                Waits for an object to appear within the specified timeout.
+                            </p>
+                            <strong>Parameters:</strong>
+                            <ul>
+                                <li><code>objectName</code> (str): The object name</li>
+                                <li><code>timeout</code> (int): Timeout in milliseconds (default: 20000)</li>
+                            </ul>
+                            <strong>Returns:</strong> Object reference
+                            <pre class="code-block mt-2"><code class="language-python"># Wait for object with default timeout
+button = waitForObject(":Submit_QPushButton")
+
+# Wait with custom timeout (5 seconds)
+dialog = waitForObject(":Progress_QDialog", 5000)</code></pre>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Object Interaction -->
+                <section id="object-interaction" class="mb-5">
+                    <h2>Object Interaction</h2>
+                    <p>Functions for interacting with UI objects.</p>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">clickButton(button)</h5>
+                            <p class="card-text">
+                                Clicks a button object.
+                            </p>
+                            <strong>Parameters:</strong>
+                            <ul>
+                                <li><code>button</code> (Object): Button object to click</li>
+                            </ul>
+                            <pre class="code-block mt-2"><code class="language-python">button = findObject(":OK_QPushButton")
+clickButton(button)</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">type(object, text)</h5>
+                            <p class="card-text">
+                                Types text into an object (usually a text field).
+                            </p>
+                            <strong>Parameters:</strong>
+                            <ul>
+                                <li><code>object</code> (Object): Target object</li>
+                                <li><code>text</code> (str): Text to type</li>
+                            </ul>
+                            <pre class="code-block mt-2"><code class="language-python">text_field = findObject(":Username_QLineEdit")
+type(text_field, "john_doe")</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">mouseClick(object, x=None, y=None, button=MouseButton.LeftButton)</h5>
+                            <p class="card-text">
+                                Performs a mouse click on an object.
+                            </p>
+                            <strong>Parameters:</strong>
+                            <ul>
+                                <li><code>object</code> (Object): Target object</li>
+                                <li><code>x, y</code> (int): Optional coordinates (relative to object)</li>
+                                <li><code>button</code> (MouseButton): Mouse button to use</li>
+                            </ul>
+                            <pre class="code-block mt-2"><code class="language-python"># Click center of object
+mouseClick(findObject(":Label_QLabel"))
+
+# Click specific coordinates
+mouseClick(findObject(":Canvas_QWidget"), 100, 50)
+
+# Right-click
+mouseClick(findObject(":Item_QTreeWidgetItem"), button=MouseButton.RightButton)</code></pre>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Verification -->
+                <section id="verification" class="mb-5">
+                    <h2>Verification</h2>
+                    <p>Functions for verifying test results and object states.</p>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">test.verify(condition, message="")</h5>
+                            <p class="card-text">
+                                Verifies that a condition is true.
+                            </p>
+                            <strong>Parameters:</strong>
+                            <ul>
+                                <li><code>condition</code> (bool): Condition to verify</li>
+                                <li><code>message</code> (str): Optional message for logging</li>
+                            </ul>
+                            <pre class="code-block mt-2"><code class="language-python">import test
+
+# Simple verification
+test.verify(object.visible)
+
+# With custom message
+test.verify(object.text == "Expected", "Text matches expected value")</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">test.compare(actual, expected, message="")</h5>
+                            <p class="card-text">
+                                Compares two values for equality.
+                            </p>
+                            <strong>Parameters:</strong>
+                            <ul>
+                                <li><code>actual</code> (any): Actual value</li>
+                                <li><code>expected</code> (any): Expected value</li>
+                                <li><code>message</code> (str): Optional message</li>
+                            </ul>
+                            <pre class="code-block mt-2"><code class="language-python">import test
+
+# Compare values
+test.compare(text_field.text, "john_doe")
+
+# Compare with message
+test.compare(button.enabled, True, "Button should be enabled")</code></pre>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Application Control -->
+                <section id="application-control" class="mb-5">
+                    <h2>Application Control</h2>
+                    <p>Functions for controlling application lifecycle.</p>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">startApplication(command, cwd="")</h5>
+                            <p class="card-text">
+                                Starts an application for testing.
+                            </p>
+                            <strong>Parameters:</strong>
+                            <ul>
+                                <li><code>command</code> (str): Command to start the application</li>
+                                <li><code>cwd</code> (str): Working directory (optional)</li>
+                            </ul>
+                            <pre class="code-block mt-2"><code class="language-python"># Start application
+startApplication("myapp")
+
+# Start with specific working directory
+startApplication("myapp", "/path/to/app")</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">closeApplication()</h5>
+                            <p class="card-text">
+                                Closes the currently running application.
+                            </p>
+                            <pre class="code-block mt-2"><code class="language-python">closeApplication()</code></pre>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Data Handling -->
+                <section id="data-handling" class="mb-5">
+                    <h2>Data Handling</h2>
+                    <p>Functions for handling test data and file operations.</p>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">testData.dataset(filename)</h5>
+                            <p class="card-text">
+                                Loads test data from a CSV file.
+                            </p>
+                            <strong>Parameters:</strong>
+                            <ul>
+                                <li><code>filename</code> (str): Path to CSV file</li>
+                            </ul>
+                            <pre class="code-block mt-2"><code class="language-python">import testData
+
+# Load test data
+data = testData.dataset("userdata.csv")
+
+# Iterate through data
+for record in data:
+    username = record["username"]
+    password = record["password"]
+    # Use data in test</code></pre>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Image Verification -->
+                <section id="image-verification" class="mb-5">
+                    <h2>Image Verification</h2>
+                    <p>Functions for image-based verification.</p>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">test.imagePresent(image, object=None)</h5>
+                            <p class="card-text">
+                                Verifies that an image is present on screen or within an object.
+                            </p>
+                            <strong>Parameters:</strong>
+                            <ul>
+                                <li><code>image</code> (str): Path to reference image</li>
+                                <li><code>object</code> (Object): Optional object to search within</li>
+                            </ul>
+                            <pre class="code-block mt-2"><code class="language-python">import test
+
+# Check if image is present on screen
+test.imagePresent("icon.png")
+
+# Check within specific object
+test.imagePresent("button_state.png", findObject(":Button_QPushButton"))</code></pre>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Keyboard & Mouse -->
+                <section id="keyboard-mouse" class="mb-5">
+                    <h2>Keyboard & Mouse</h2>
+                    <p>Low-level keyboard and mouse operations.</p>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">nativeType(text)</h5>
+                            <p class="card-text">
+                                Types text using native keyboard events.
+                            </p>
+                            <strong>Parameters:</strong>
+                            <ul>
+                                <li><code>text</code> (str): Text to type</li>
+                            </ul>
+                            <pre class="code-block mt-2"><code class="language-python"># Type text with native events
+nativeType("Hello World")
+
+# Type special keys
+nativeType("<Tab>")
+nativeType("<Return>")</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">mouseDrag(startObject, endObject, modifier=Modifier.None)</h5>
+                            <p class="card-text">
+                                Performs a mouse drag operation.
+                            </p>
+                            <strong>Parameters:</strong>
+                            <ul>
+                                <li><code>startObject</code> (Object): Starting object</li>
+                                <li><code>endObject</code> (Object): Ending object</li>
+                                <li><code>modifier</code> (Modifier): Key modifier</li>
+                            </ul>
+                            <pre class="code-block mt-2"><code class="language-python"># Drag from one object to another
+mouseDrag(findObject(":Source_QLabel"), findObject(":Target_QLabel"))</code></pre>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Utility Functions -->
+                <section id="utility-functions" class="mb-5">
+                    <h2>Utility Functions</h2>
+                    <p>Helper functions for common operations.</p>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">snooze(seconds)</h5>
+                            <p class="card-text">
+                                Pauses execution for the specified number of seconds.
+                            </p>
+                            <strong>Parameters:</strong>
+                            <ul>
+                                <li><code>seconds</code> (float): Number of seconds to wait</li>
+                            </ul>
+                            <pre class="code-block mt-2"><code class="language-python"># Wait for 2 seconds
+snooze(2)
+
+# Wait for 500 milliseconds
+snooze(0.5)</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">test.log(message, level=LogLevel.Info)</h5>
+                            <p class="card-text">
+                                Logs a message to the test results.
+                            </p>
+                            <strong>Parameters:</strong>
+                            <ul>
+                                <li><code>message</code> (str): Message to log</li>
+                                <li><code>level</code> (LogLevel): Log level</li>
+                            </ul>
+                            <pre class="code-block mt-2"><code class="language-python">import test
+
+# Log info message
+test.log("Starting login test")
+
+# Log warning
+test.log("Unexpected behavior detected", test.LogLevel.Warning)
+
+# Log error
+test.log("Test failed", test.LogLevel.Error)</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Smooth scrolling for sidebar links
+    document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+            
+            // Update active link
+            document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+    
+    // Update active link on scroll
+    window.addEventListener('scroll', function() {
+        const sections = document.querySelectorAll('section[id]');
+        const scrollPos = window.scrollY + 100;
+        
+        sections.forEach(section => {
+            const top = section.offsetTop;
+            const height = section.offsetHeight;
+            const id = section.getAttribute('id');
+            
+            if (scrollPos >= top && scrollPos < top + height) {
+                document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${id}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

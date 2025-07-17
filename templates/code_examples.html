@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Code Examples - Squish Testing Portal{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="text-center mb-4">Python Code Examples</h1>
+            <p class="lead text-center mb-5">
+                Learn Squish testing through practical Python examples, from basic interactions to advanced scenarios.
+            </p>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <button class="btn btn-outline-primary me-2" onclick="filterExamples('all')">All</button>
+                    <button class="btn btn-outline-primary me-2" onclick="filterExamples('basic')">Basic</button>
+                    <button class="btn btn-outline-primary me-2" onclick="filterExamples('advanced')">Advanced</button>
+                    <button class="btn btn-outline-primary me-2" onclick="filterExamples('real-world')">Real World</button>
+                </div>
+                <div>
+                    <button class="btn btn-outline-secondary me-2" onclick="sortExamples('title')">Sort by Title</button>
+                    <button class="btn btn-outline-secondary" onclick="sortExamples('difficulty')">Sort by Difficulty</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row" id="examples-container">
+        {% for example in examples %}
+        <div class="col-md-6 mb-4 example-card" data-category="{{ example.category }}" data-difficulty="{{ example.difficulty }}">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="card-title">{{ example.title }}</h5>
+                        <span class="badge bg-{{ 'success' if example.difficulty == 'beginner' else 'warning' if example.difficulty == 'intermediate' else 'danger' }} difficulty-badge">
+                            {{ example.difficulty.title() }}
+                        </span>
+                    </div>
+                    <p class="card-text">{{ example.description }}</p>
+                    <div class="mb-3">
+                        <span class="badge bg-secondary">{{ example.category.title() }}</span>
+                    </div>
+                    <a href="{{ url_for('code_example_detail', example_id=example.id) }}" class="btn btn-primary">
+                        View Code <i class="fas fa-code"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% if not examples %}
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                No examples found. Check back later for more content!
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="text-center mb-4">Quick Reference</h2>
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="fas fa-mouse-pointer text-primary"></i>
+                                    Object Interaction
+                                </h5>
+                                <pre class="code-block"><code class="language-python"># Click a button
+button = findObject(":OK_QPushButton")
+clickButton(button)
+
+# Type text
+text_field = findObject(":Input_QLineEdit")
+type(text_field, "Hello World")
+
+# Mouse click
+mouseClick(findObject(":Label_QLabel"))</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                    Verification
+                                </h5>
+                                <pre class="code-block"><code class="language-python"># Verify object state
+test.verify(object.visible)
+test.verify(object.enabled)
+
+# Compare values
+test.compare(text_field.text, "expected")
+
+# Check object existence
+test.verify(object.exists)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="fas fa-search text-info"></i>
+                                    Object Finding
+                                </h5>
+                                <pre class="code-block"><code class="language-python"># Find by name
+obj = findObject(":Button_QPushButton")
+
+# Find by properties
+obj = findObject({"type": "QLineEdit", "name": "username"})
+
+# Wait for object
+obj = waitForObject(":Dialog_QDialog", 5000)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="fas fa-cog text-warning"></i>
+                                    App Control
+                                </h5>
+                                <pre class="code-block"><code class="language-python"># Start application
+startApplication("myapp")
+
+# Wait/pause
+snooze(2)  # Wait 2 seconds
+
+# Close application
+closeApplication()</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let allExamples = [...document.querySelectorAll('.example-card')];
+    
+    function filterExamples(category) {
+        const examples = document.querySelectorAll('.example-card');
+        
+        examples.forEach(example => {
+            if (category === 'all' || example.dataset.category === category) {
+                example.style.display = 'block';
+            } else {
+                example.style.display = 'none';
+            }
+        });
+        
+        // Update active button
+        document.querySelectorAll('button[onclick^="filterExamples"]').forEach(btn => {
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-outline-primary');
+        });
+        event.target.classList.remove('btn-outline-primary');
+        event.target.classList.add('btn-primary');
+    }
+    
+    function sortExamples(sortBy) {
+        const container = document.getElementById('examples-container');
+        const examples = [...container.querySelectorAll('.example-card')];
+        
+        examples.sort((a, b) => {
+            if (sortBy === 'title') {
+                const titleA = a.querySelector('.card-title').textContent.toLowerCase();
+                const titleB = b.querySelector('.card-title').textContent.toLowerCase();
+                return titleA.localeCompare(titleB);
+            } else if (sortBy === 'difficulty') {
+                const difficultyOrder = { 'beginner': 1, 'intermediate': 2, 'advanced': 3 };
+                const diffA = difficultyOrder[a.dataset.difficulty];
+                const diffB = difficultyOrder[b.dataset.difficulty];
+                return diffA - diffB;
+            }
+        });
+        
+        // Re-append sorted elements
+        examples.forEach(example => container.appendChild(example));
+        
+        // Update active button
+        document.querySelectorAll('button[onclick^="sortExamples"]').forEach(btn => {
+            btn.classList.remove('btn-secondary');
+            btn.classList.add('btn-outline-secondary');
+        });
+        event.target.classList.remove('btn-outline-secondary');
+        event.target.classList.add('btn-secondary');
+    }
+    
+    // Initialize with 'all' filter active
+    document.querySelector('button[onclick="filterExamples(\'all\')"]').classList.remove('btn-outline-primary');
+    document.querySelector('button[onclick="filterExamples(\'all\')"]').classList.add('btn-primary');
+</script>
+{% endblock %}
